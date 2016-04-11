@@ -1,8 +1,14 @@
 import requests
 
-lastFmAPIKey = 'xxxx'
-spotifyAuthToken = 'xxxx'
-spotifyRefreshToken = 'xxxx'
+#auth details
+lastFmAPIKey = 'xxx'
+spotifyAuthToken = 'xxx='
+spotifyRefreshToken = 'xxx'
+
+#playlists
+rediscoverPlaylist = '1frv2udr1TM9T43xWksiny'
+guitarPlaylist = '2xnV5KuZ4mHnWgd9cGPZPV'
+limboPlaylist = '6MHKoVNR2GMUzEaTeJ27Xq'
 
 def rediscover(event, context):
 
@@ -38,9 +44,7 @@ def rediscover(event, context):
     r = requests.get(url, headers=headers)
     #print(r.text)
 
-    url = 'https://api.spotify.com/v1/users/1244599073/playlists/1frv2udr1TM9T43xWksiny/tracks'
-    #1frv2udr1TM9T43xWksiny rediscover
-    #2xnV5KuZ4mHnWgd9cGPZPV guitar
+    url = 'https://api.spotify.com/v1/users/1244599073/playlists/' + rediscoverPlaylist + '/tracks'
 
     headers = {'Authorization':'Bearer ' + access_token}
 
@@ -82,20 +86,16 @@ def rediscover(event, context):
         response_json=r.json()
         #print(response_json)
         
-        url="https://api.spotify.com/v1/users/1244599073/playlists/6MHKoVNR2GMUzEaTeJ27Xq/tracks"
+        url='https://api.spotify.com/v1/users/1244599073/playlists/' + limboPlaylist + '/tracks'
         payload = '{"uris": ["spotify:track:' +trackId + '"]}'
         r = requests.post(url, headers=headers, data=payload)
         response_json=r.json()
 
-        url="https://api.spotify.com/v1/users/1244599073/playlists/1frv2udr1TM9T43xWksiny/tracks"
+        url='https://api.spotify.com/v1/users/1244599073/playlists/' + rediscoverPlaylist + '/tracks'
         payload = '{"uris": ["spotify:track:' +trackId + '"]}'
         r = requests.delete(url, headers=headers, data=payload)
         response_json=r.json()
         print("removing track: " + track + " from Rediscover")
-
-
-
-    #In Limbo: 6MHKoVNR2GMUzEaTeJ27Xq
 
 if __name__ == "__main__":
     rediscover("event", "context")
